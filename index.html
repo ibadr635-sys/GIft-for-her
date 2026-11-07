@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HSK 2 Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <h1 class="title">Chinese According to ME</h1>
+      <p class="subtitle">Tap the card to translate mama.</p>
+
+      <!-- The 3D Flip Card -->
+      <div class="card-container" id="flashcard">
+        <div class="card-inner">
+          <!-- Front of the card (Chinese) -->
+          <div class="card-front">
+            <h2 id="vocab-text">你好</h2>
+          </div>
+
+          <!-- Back of the card (English / Image) -->
+          <div class="card-back">
+            <div id="image-container" class="hidden">
+              <div class="image-wrapper">
+                <img id="card-image" src="" alt="Ada Wong" />
+                <div id="flash-overlay"></div>
+                <!-- The camera flash -->
+
+                <!-- The Star Flashes -->
+                <!-- The Star Flashes & Hearts -->
+                <span class="star star1">✨</span>
+                <span class="heart heart1">💖</span>
+
+                <span class="star star2">✨</span>
+                <span class="heart heart2">💕</span>
+
+                <span class="star star3">✨</span>
+                <span class="heart heart3">💖</span>
+
+                <span class="star star4">✨</span>
+                <span class="heart heart4">💕</span>
+              </div>
+            </div>
+            <p id="translation-text">Hello (Boring, standard).</p>
+          </div>
+        </div>
+      </div>
+
+      <button id="next-btn" class="nav-button">Next Card ➔</button>
+    </div>
+
+    <script>
+      const flashcards = [
+        { vocab: "你好", translation: "Hello (Boring, standard)." },
+        {
+          vocab: "炒饭",
+          translation: "Fried Rice:Something i wish to try one day",
+        },
+        {
+          vocab: "化妆",
+          translation: "YOU,Luv",
+          image: "https://i.postimg.cc/ZKWDyyDt/ada.jpg",
+        },
+        {
+          vocab: "国王",
+          translation: "Ya boi (This site isnt about me,mama!)",
+        },
+        {
+          vocab: "公主",
+          translation:
+            "That woman that was back there 2 flash cards ago i have no idea who she is though...",
+        },
+      ];
+
+      let currentIndex = 0;
+
+      const cardContainer = document.getElementById("flashcard");
+      const vocabText = document.getElementById("vocab-text");
+      const translationText = document.getElementById("translation-text");
+      const imageContainer = document.getElementById("image-container");
+      const cardImage = document.getElementById("card-image");
+      const nextBtn = document.getElementById("next-btn");
+
+      // Handle the Card Flip
+      cardContainer.addEventListener("click", () => {
+        cardContainer.classList.toggle("is-flipped");
+      });
+
+      // Handle the Next Button
+      nextBtn.addEventListener("click", () => {
+        if (cardContainer.classList.contains("is-flipped")) {
+          cardContainer.classList.remove("is-flipped");
+
+          // Wait for the card to flip back down before changing the text
+          setTimeout(() => {
+            loadNextCard();
+          }, 600);
+        } else {
+          loadNextCard();
+        }
+      });
+
+      function loadNextCard() {
+        currentIndex = (currentIndex + 1) % flashcards.length;
+        const currentCard = flashcards[currentIndex];
+
+        vocabText.innerText = currentCard.vocab;
+        translationText.innerText = currentCard.translation;
+
+        // Reset the flash animation
+        imageContainer.classList.remove("trigger-flash");
+
+        if (currentCard.image) {
+          cardImage.src = currentCard.image;
+          imageContainer.classList.remove("hidden");
+
+          // This tiny trick forces the browser to restart the flash animation
+          void imageContainer.offsetWidth;
+          imageContainer.classList.add("trigger-flash");
+        } else {
+          imageContainer.classList.add("hidden");
+        }
+      }
+    </script>
+  </body>
+</html>
